@@ -1,0 +1,146 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Vacation picker! Where should I go?</title>
+    
+    <script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+    <script type="text/javascript" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/js/bootstrap.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc2/css/bootstrap.min.css" />
+</head>
+    
+<body>
+    <br />
+    <div class="row content">
+        <div class="container jumbotron">
+            <div class="col-md-9 ">
+                <h1>Vacation Picker</h1>
+                <form id="cityForm" class="form-inline" role="form">
+                    <div class="form-group">
+                        <label class="sr-only" for="city">City</label>
+                        <input type="text" class="form-control" placeholder="Enter a City" id="city">
+                    </div>
+                    <div class="form-group">
+                        <label class="sr-only" for="state">State</label>
+                        <input type="text" class="form-control" placeholder="Enter a State" id="state">
+                    </div>
+                            <!-- make this into a dropdown list... don't forget -->
+                        <button type="submit" id="submit" class="btn btn-sm btn-default btn-primary">Search City</button>
+			<button onclick="window.location.href='http://hackru.rubiverse.net'" class="btn btn-sm btn-default">Refresh</button>
+                </form>
+		</div>
+            <div class="col-md-3"><p>Just input a couple cities, and compare which cities have nicer weather!</p></div>
+        </div>
+
+        
+        
+        
+        <div  class="container">
+            <div id="cityData" class="row"></div>
+        <span><small>Created by <a href="http://twitter.com/arub1">@arub1</a>. HackRU 2013</small></span>
+		</div>
+
+
+	</div>
+<script>
+
+        //call variables for API URL and form, evalute, take output and convert to string
+        var url_prefix = 'http://api.wunderground.com/api/5a88753778556cf2/conditions/q/';
+        var city = $('#city');
+        var state = $('#state');
+        var wiki_prefix = 'http://en.wikipedia.org/wiki/Special:Search/';        
+
+        $('#cityForm').submit(function(e) {
+            e.preventDefault();
+            var cityUrl = (url_prefix + state.val() + '/' + city.val().replace(' ', '_') +'.json');
+            var wikiUrl = wiki_prefix + city.val().replace(' ', '_') + ', ' + state.val();  
+
+            $.ajax ({
+                url: cityUrl,
+                dataType: 'jsonp',
+                success: function(data) {
+                    $("#cityData").append(
+                        
+                        
+                        '<div class="panel panel-success col-md-4 span">' +
+                        
+                        '<div class="panel-heading"><a href="' +
+
+                        wikiUrl +
+
+                        '">' +
+                        
+                        data.current_observation.display_location.city +
+                        
+                        ', ' +
+                        
+                        
+                        data.current_observation.display_location.state +
+
+                        
+                        '</a><img src="' +
+                        
+                        data.current_observation.icon_url +
+                        
+                        '" alt="..." style="margin-top: -15px;" class="pull-right img-rounded"/>' +
+
+                        '</div>' +
+                        
+                        
+        
+                        '<ul class="list-group">' +
+
+                            '<li class="list-group-item">' +
+                                '<span class="badge">' +
+                        
+                        data.current_observation.temp_f +
+                         
+                        
+                        '&#8457;</span>' +
+                                'Temperature' +
+                            '</li>' +
+                        
+                            '<li class="list-group-item">' +
+                                '<span class="badge">' +
+                        
+                         data.current_observation.feelslike_f +
+
+                            
+                        '&#8457;</span>' +
+                                'Feels Like' +
+                            '</li>' +
+                        
+                        
+                            '<li class="list-group-item">' +
+                                '<span class="badge">' +
+                        
+                         data.current_observation.precip_1hr_string +
+
+                            
+                        '</span>' +
+                                'Precipitation' +
+                            '</li>' +
+                        
+                        '</ul>' +
+				
+
+			'<span class="clearfix badge">' +
+
+			data.current_observation.observation_time +
+
+			'</span>' +
+
+			'</div>'
+                        
+                        
+                    )
+                }
+            });
+        });
+</script>
+
+<script type="text/javascript"> var GoSquared = {acct: "GSN-611252-M"}; (function(w){ function gs(){ w._gstc_lt = +new Date; var d = document, g = d.createElement("script"); g.type = "text/javascript"; g.src = "//d1l6p2sc9645hc.cloudfront.net/tracker.js"; var s = d.getElementsByTagName("script")[0]; s.parentNode.insertBefore(g, s); } w.addEventListener ? w.addEventListener("load", gs, false) : w.attachEvent("onload", gs); })(window); </script>
+
+</body>
+</html>
